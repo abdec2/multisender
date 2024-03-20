@@ -2,7 +2,7 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Head from "next/head";
-import {ContextProvider} from "./api/connect";
+import {ContextProvider} from "../api/connect";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return <>

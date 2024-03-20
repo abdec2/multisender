@@ -6,7 +6,7 @@ const nextConfig = {
   experimental:{
     styledCompontents:true
   },
-  assetPrefix: isProd ?'/multisender':'',
+  // assetPrefix: isProd ?'/multisender':'',
 }
 
 module.exports = nextConfig

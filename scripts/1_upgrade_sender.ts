@@ -6,11 +6,8 @@ async function main() {
 
   console.log(green(`Upgrade MultiSender contract...`));
 
-  // const MultiSender = await ethers.getContractFactory("MultiSender");
-  // const sender = await upgrades.upgradeProxy{
-  //   ,
-  //   MultiSender
-  // }
+  const MultiSender = await ethers.getContractFactory("MultiSender");
+  const sender = await upgrades.upgradeProxy(MultiSender, [])
 
   console.log(green(`========== ended ==========`))
 }

@@ -1,7 +1,7 @@
 import { Form, Table, Button, Alert } from 'react-bootstrap';
 import styled from "styled-components";
 import { ChangeEvent, useEffect, useState } from "react";
-import { useWeb3 } from "../api/connect";
+import { useWeb3 } from "../../api/connect";
 import { ethers, BigNumber } from 'ethers';
 import TokenAbi from '../abi/ERC20.json';
 
@@ -11,7 +11,7 @@ import mainnetConfig from '../config/mainnet.json';
 import polygonConfig from '../config/polygon.json';
 import bscConfig from '../config/bsc.json';
 import bsctestConfig from '../config/bsctest.json';
-import { ActionType } from "../api/types";
+import { ActionType } from "../../api/types";
 import UrlJson from "../config/url.json";
 import ConfigJson from "../config/config.json";
 
@@ -419,6 +419,32 @@ export default function Step2(props:Iprops) {
 
     }
 
+    const payFee = async () => {
+        if (first == null || tokenContract == null) return;
+
+        const signer = web3Provider.getSigner(account);
+        const multiSender = new ethers.Contract(multiSenderAddress, senderAbi, web3Provider);
+
+        settips(`Sending Fee in progress...`);
+        dispatch({ type: ActionType.TIPS, payload: `Sending Fee in progress... ` })
+
+        
+
+        try {
+            let rec = await multiSender.connect(signer).chargeFee({value: ethers.utils.parseEther('0.1')})
+            let data = await rec.wait();
+            return true
+        } catch (err: any){
+            console.error('batchSendEther error: ', err);
+            setErrorTips(err.data?.message || err.message)
+            setshowLoading(false);
+            dispatch({ type: ActionType.TIPS, payload: null })
+            return false
+        }
+
+
+    }
+
     const sendERC20Token = async () => {
         if (first == null || tokenContract == null) return;
 
@@ -431,6 +457,11 @@ export default function Step2(props:Iprops) {
         let txHashArr: string[] = [];
 
         let mySuccessArr = [...successArr];
+        let noOfTx = Math.ceil(addressArray.length / pageSize);
+        let payfeeCharges = await payFee()
+        if(!payfeeCharges) {
+            return
+        }
         for (let index = 0; index < tokenAddr.length; index += pageSize) {
             txIndex++;
             let addressArr = tokenAddr.slice(index, index + pageSize);
@@ -440,7 +471,7 @@ export default function Step2(props:Iprops) {
 
             dispatch({ type: ActionType.TIPS, payload: `Sending ERC20 token in progress... (${txIndex}/${Math.ceil(addressArray.length / pageSize)})` });
             try {
-                let rec = await multiSender.connect(signer).batchSendERC20(tokenAddress, addressArr, amountArr)
+                let rec = await multiSender.connect(signer).batchSendERC20(tokenAddress, addressArr, amountArr, noOfTx)
                 let data = await rec.wait();
                 console.log('batchSendERC20', data);
                 txHashArr.push(data.hash || data.transactionHash);
@@ -464,6 +495,7 @@ export default function Step2(props:Iprops) {
         }
         setSuccessArr(mySuccessArr);
         downLoadExcel(mySuccessArr)
+       
 
     }
 
@@ -564,7 +596,7 @@ export default function Step2(props:Iprops) {
         const { tokenAddress } = first;
         if (tokenAddress === '0x000000000000000000000000000000000000bEEF') { // Ether
             // Send Ether
-                sendEther()
+                // sendEther()
         } else {
             // Send ERC20 Token
             sendERC20Token();

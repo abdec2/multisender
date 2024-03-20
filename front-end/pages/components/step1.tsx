@@ -1,9 +1,9 @@
 import {Row, Col, Form, FloatingLabel, Button, Alert} from 'react-bootstrap';
 import styled from "styled-components";
 import {ChangeEvent, useState, useEffect} from "react";
-import {useWeb3} from "../api/connect";
+import {useWeb3} from "../../api/connect";
 import Excel from "./excel";
-import {ActionType} from "../api/types";
+import {ActionType} from "../../api/types";
 import {ethers} from "ethers";
 import TokenAbi from "../abi/ERC20.json";
 // import {type} from "os";
@@ -49,7 +49,7 @@ export default function Step1(props:Props){
     const { dispatch,state } = useWeb3();
     const { account, web3Provider } = state;
 
-    const [tokenAddress, settokenAddress] = useState<string>('0x000000000000000000000000000000000000bEEF'); // 0xbEEF as Ether
+    const [tokenAddress, settokenAddress] = useState<string>('0x1cc7047E15825F639E0752Eb1b89E4225F5327F2'); // 0xbEEF as Ether
     const [decimals, setdecimals] = useState<number>(18);
     const [amounts, setamounts] = useState<string>('');
     const [btndisabled, setbtndisabled] = useState(true);
@@ -70,7 +70,7 @@ export default function Step1(props:Props){
         if(web3Provider == null) return;
 
         const getDecimals = async() =>{
-            if(tokenAddress === "0x000000000000000000000000000000000000bEEF") return;
+            if(tokenAddress === "0x1cc7047E15825F639E0752Eb1b89E4225F5327F2") return;
             const tokenContract = new ethers.Contract(tokenAddress, TokenAbi, web3Provider);
             try{
                 const decimals = await tokenContract?.decimals();

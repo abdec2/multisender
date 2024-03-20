@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Spinner from 'react-bootstrap/Spinner';
-import {useWeb3} from "../api/connect";
+import {useWeb3} from "../../api/connect";
 
 const Box = styled.div`
     background: rgba(0,0,0,0.2);

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button,Dropdown } from 'react-bootstrap';
-import {ActionType} from "../api/types";
-import ChainJson from "../api/chain.json";
+import {ActionType} from "../../api/types";
+import ChainJson from "../../api/chain.json";
 import {X} from "react-bootstrap-icons"
-import Accounts from '../api/Account';
-import {useWeb3} from "../api/connect";
+import Accounts from '../../api/Account';
+import {useWeb3} from "../../api/connect";
 import styled from "styled-components";
 import ConfigJson from "../config/config.json";
 

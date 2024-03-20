@@ -9,7 +9,7 @@ import Step2 from "./components/step2";
 import Step3 from "./components/step3";
 import {useState} from "react";
 import Loading from "./components/loading";
-import {useWeb3} from "./api/connect";
+import {useWeb3} from "../api/connect";
 
 const MainBox = styled.div`
     display: flex;

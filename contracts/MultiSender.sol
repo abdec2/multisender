@@ -13,6 +13,11 @@ contract MultiSender is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     address constant ETH_ADDRESS = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
     uint16 public arrayLimit;
 
+    uint256 public fee = 1 ether;
+
+    mapping(address => bool) private feecharged;
+    mapping(address => uint256) private noOfTx; 
+
     function initialize() public initializer {
         __ReentrancyGuard_init();
         __Ownable_init();
@@ -23,80 +28,104 @@ contract MultiSender is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     event MultisendToken(uint256 total, address tokenAddress);
     event ClaimedToken(address token, address owner, uint256 balance);
 
+    function setFee(uint256 _fee) public onlyOwner {
+        fee = _fee;
+    }
+
+    function chargeFee() payable external {
+        require(msg.sender != address(0), 'Invalid Sender');
+        require(msg.value >= fee, "Invalid Fee");
+
+        feecharged[msg.sender] = true;
+    }
+
     function batchSendERC20(
         address _token,
         address[] memory _targets,
-        uint256[] memory _amounts
+        uint256[] memory _amounts, 
+        uint256 _noOfTx
     ) public returns (bool success) {
         require(
             _targets.length == _amounts.length,
             "The length of params are not equal."
         );
+        require(feecharged[msg.sender], "Tx fee is not paid");
+
+        if(noOfTx[msg.sender] == 0) {
+            noOfTx[msg.sender] = _noOfTx;
+        }
+
         IERC20Upgradeable token = IERC20Upgradeable(_token);
         uint256 total = 0;
         for (uint256 i = 0; i < _targets.length; i++) {
             token.safeTransferFrom(msg.sender, _targets[i], _amounts[i]);
             total += _amounts[i];
         }
+        noOfTx[msg.sender] = noOfTx[msg.sender] - 1;
+
+        if(noOfTx[msg.sender] == 0) {
+            feecharged[msg.sender] = false;
+        }
+        
         emit MultisendToken(total, _token);
         return true;
     }
 
-    function batchSendFixedERC20(
-        address _token,
-        address[] memory _targets,
-        uint256 _amount
-    ) public {
-        require(_targets.length > 0, "none address provided");
+    // function batchSendFixedERC20(
+    //     address _token,
+    //     address[] memory _targets,
+    //     uint256 _amount
+    // ) public {
+    //     require(_targets.length > 0, "none address provided");
 
-        IERC20Upgradeable token = IERC20Upgradeable(_token);
-        uint256 total = _amount * _targets.length;
-        for (uint256 i = 0; i < _targets.length; i++) {
-            token.safeTransferFrom(msg.sender, _targets[i], _amount);
-        }
-        emit MultisendToken(total, _token);
-    }
+    //     IERC20Upgradeable token = IERC20Upgradeable(_token);
+    //     uint256 total = _amount * _targets.length;
+    //     for (uint256 i = 0; i < _targets.length; i++) {
+    //         token.safeTransferFrom(msg.sender, _targets[i], _amount);
+    //     }
+    //     emit MultisendToken(total, _token);
+    // }
 
-    function batchSendEther(
-        address payable[] memory _targets,
-        uint256[] memory _amounts
-    ) public payable {
-        require(
-            _targets.length == _amounts.length,
-            "The length of params are not equal."
-        );
+    // function batchSendEther(
+    //     address payable[] memory _targets,
+    //     uint256[] memory _amounts
+    // ) public payable {
+    //     require(
+    //         _targets.length == _amounts.length,
+    //         "The length of params are not equal."
+    //     );
 
-        uint256 total = 0;
-        for (uint256 i = 0; i < _targets.length; i++) {
-            total += _amounts[i];
-        }
-        require(msg.value >= total, "Insufficient fund");
+    //     uint256 total = 0;
+    //     for (uint256 i = 0; i < _targets.length; i++) {
+    //         total += _amounts[i];
+    //     }
+    //     require(msg.value >= total, "Insufficient fund");
 
-        for (uint256 i = 0; i < _targets.length; i++) {
-            (bool sent, ) = _targets[i].call{value: _amounts[i]}("");
-            require(sent, "transfer eth failed");
-            total += _amounts[i];
-        }
+    //     for (uint256 i = 0; i < _targets.length; i++) {
+    //         (bool sent, ) = _targets[i].call{value: _amounts[i]}("");
+    //         require(sent, "transfer eth failed");
+    //         total += _amounts[i];
+    //     }
 
-        emit MultisendToken(total, address(0));
-    }
+    //     emit MultisendToken(total, address(0));
+    // }
 
-    function batchSendFixedEther(
-        address payable[] memory _targets,
-        uint256 _amount
-    ) public payable {
-        require(_targets.length > 0, "none address provided");
-        uint256 total = _targets.length * _amount;
+    // function batchSendFixedEther(
+    //     address payable[] memory _targets,
+    //     uint256 _amount
+    // ) public payable {
+    //     require(_targets.length > 0, "none address provided");
+    //     uint256 total = _targets.length * _amount;
 
-        require(msg.value >= total, "insufficient fund");
+    //     require(msg.value >= total, "insufficient fund");
 
-        for (uint256 i = 0; i < _targets.length; i++) {
-            (bool sent, ) = _targets[i].call{value: _amount}("");
-            require(sent, "transfer eth failed");
-        }
+    //     for (uint256 i = 0; i < _targets.length; i++) {
+    //         (bool sent, ) = _targets[i].call{value: _amount}("");
+    //         require(sent, "transfer eth failed");
+    //     }
 
-        emit MultisendToken(total, address(0));
-    }
+    //     emit MultisendToken(total, address(0));
+    // }
 
     function claimBalance(address _token) public onlyOwner {
         uint256 balance = 0x0;

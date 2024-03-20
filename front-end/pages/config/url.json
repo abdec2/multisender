@@ -26,5 +26,9 @@
   {
     "id": 256,
     "url": "https://testnet.hecoinfo.com/tx"
+  },
+  {
+    "id": 80001,
+    "url": "https://mumbai.polygonscan.com/tx"
   }
 ]

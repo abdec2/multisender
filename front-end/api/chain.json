@@ -10378,11 +10378,11 @@
   {
     "name": "Mumbai",
     "title": "Polygon Testnet Mumbai",
-    "chain": "Polygon",
+    "chain": "Mumbai",
     "rpc": [
-      "https://matic-mumbai.chainstacklabs.com",
-      "https://rpc-mumbai.maticvigil.com",
-      "https://matic-testnet-archive-rpc.bwarelabs.com"
+      "https://polygon-mumbai-pokt.nodies.app",
+      "https://rpc.ankr.com/polygon_mumbai",
+      "https://rpc-mumbai.maticvigil.com"
     ],
     "faucets": [
       "https://faucet.polygon.technology/"
@@ -12234,18 +12234,14 @@
     "title": "Ethereum Testnet Sepolia",
     "chain": "ETH",
     "rpc": [
-      "https://rpc.sepolia.dev",
-      "https://rpc.sepolia.online",
-      "https://www.sepoliarpc.space",
-      "https://rpc.sepolia.org",
-      "https://rpc-sepolia.rockx.com"
+      "https://ethereum-sepolia-rpc.publicnode.com",
+      "https://api.zan.top/node/v1/eth/sepolia/public",
+      "https://1rpc.io/sepolia"
     ],
-    "faucets": [
-      "http://fauceth.komputing.org?chain=11155111&address=${ADDRESS}"
-    ],
+    "faucets": [],
     "nativeCurrency": {
       "name": "Sepolia Ether",
-      "symbol": "SEP",
+      "symbol": "ETH",
       "decimals": 18
     },
     "infoURL": "https://sepolia.otterscan.io",

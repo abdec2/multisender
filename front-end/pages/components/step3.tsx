@@ -1,7 +1,7 @@
 
 import styled from "styled-components";
 import {useEffect, useState} from "react";
-import {useWeb3} from "../api/connect";
+import {useWeb3} from "../../api/connect";
 import UrlJson from "../config/url.json";
 
 const Box = styled.div`

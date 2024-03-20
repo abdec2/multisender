@@ -28,18 +28,18 @@ export default function footerBox(){
     return  <Footer>
         <Container>
             <div className="midBox">
-                <a href="https://web3camp.us" target="_blank" rel="noreferrer">
-                    <div className="lft">&copy; 2022 Web3camp.us</div>
+                <a href="http://brdigitech.com" target="_blank" rel="noreferrer">
+                    <div className="lft">&copy; 2022 Brdigitech</div>
                 </a>
 
-                <div>
+                {/* <div>
                     <a href="https://github.com/Web3Camp-Labs/multisender" target="_blank" rel="noreferrer">
                         <img src="./github.png" alt=""/>
                     </a>
                     <a href="https://twitter.com/Web3Camp" target="_blank" rel="noreferrer">
                         <img src="./Twitter.png" alt=""/>
                     </a>
-                </div>
+                </div> */}
             </div>
         </Container>
     </Footer>
