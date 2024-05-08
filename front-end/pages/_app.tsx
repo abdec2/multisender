@@ -7,9 +7,9 @@ import {ContextProvider} from "../api/connect";
 function MyApp({ Component, pageProps }: AppProps) {
   return <>
     <Head>
-      <title>Multisender</title>
+      <title>Airdrop Tool</title>
       <meta name="description" content="It supports sending ERC20 tokens and ETH!" />
-      <link rel="icon" href="/multisender/favicon.ico" />
+      
     </Head>
     <ContextProvider>
       <Component {...pageProps} />
