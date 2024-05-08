@@ -1,8 +1,8 @@
 [
   
   {
-    "chainId": 11155111,
-    "name": "Sepolia",
-    "sender": "0x11fDB04E1746FdeEFaC085639b901a08b701b3Dc"
+    "chainId": 1,
+    "name": "Ethereum Mainnet",
+    "sender": "0x8041FD08D1A4526eABb5c596d5394A17869CbAe1"
   }
 ]

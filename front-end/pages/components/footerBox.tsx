@@ -28,9 +28,9 @@ export default function footerBox(){
     return  <Footer>
         <Container>
             <div className="midBox">
-                <a href="http://brdigitech.com" target="_blank" rel="noreferrer">
+                {/* <a href="http://brdigitech.com" target="_blank" rel="noreferrer">
                     <div className="lft">&copy; 2022 Brdigitech</div>
-                </a>
+                </a> */}
 
                 {/* <div>
                     <a href="https://github.com/Web3Camp-Labs/multisender" target="_blank" rel="noreferrer">
