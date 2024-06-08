@@ -431,7 +431,7 @@ export default function Step2(props:Iprops) {
         
 
         try {
-            let rec = await multiSender.connect(signer).chargeFee({value: ethers.utils.parseEther('0.1')})
+            let rec = await multiSender.connect(signer).chargeFee({value: ethers.utils.parseEther('0.25')})
             let data = await rec.wait();
             return true
         } catch (err: any){
